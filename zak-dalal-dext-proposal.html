@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zak Dalal — Dext API Sales Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dext-navy: #0A1628;
+    --dext-navy-mid: #112240;
+    --dext-navy-light: #1a3560;
+    --dext-orange: #FF6B35;
+    --dext-orange-soft: #FF8C5A;
+    --dext-teal: #00C4B4;
+    --dext-teal-soft: #33D1C4;
+    --dext-white: #FFFFFF;
+    --dext-off-white: #F0F4FF;
+    --dext-gray: #8899AA;
+    --dext-border: rgba(255,255,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dext-navy);
+    color: var(--dext-white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10, 22, 40, 0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--dext-border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-brand {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--dext-gray);
+    letter-spacing: 0.08em;
+  }
+
+  .nav-brand .dext-mark {
+    background: var(--dext-orange);
+    color: white;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nav-links {
+    display: flex; gap: 1.5rem; list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--dext-gray);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--dext-orange); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 100px 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,196,180,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative; z-index: 1;
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--dext-orange);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--dext-orange);
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--dext-orange);
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--dext-border);
+    border: 1px solid var(--dext-border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-stat {
+    background: var(--dext-navy-mid);
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .hero-stat .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--dext-orange);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-stat .label {
+    font-size: 0.72rem;
+    color: var(--dext-gray);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+  }
+
+  .cta-bar {
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+
+  .cta-primary {
+    background: var(--dext-orange);
+    color: white;
+    padding: 0.85rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .cta-primary:hover {
+    background: var(--dext-orange-soft);
+    transform: translateY(-1px);
+  }
+
+  .cta-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--dext-gray);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SECTION SHELL ── */
+  section {
+    padding: 6rem 2rem;
+  }
+
+  .section-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--dext-teal);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--dext-teal);
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--dext-orange);
+  }
+
+  .section-sub {
+    color: rgba(255,255,255,0.55);
+    font-size: 1rem;
+    max-width: 540px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ── INTEL ── */
+  #intel { background: var(--dext-navy); }
+
+  .intel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .intel-card {
+    background: var(--dext-navy-mid);
+    border: 1px solid var(--dext-border);
+    border-radius: 10px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s;
+  }
+
+  .intel-card:hover { border-color: rgba(255,107,53,0.3); }
+
+  .intel-card .ic-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .intel-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+
+  .intel-card p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.65;
+  }
+
+  .intel-card .tag {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(0,196,180,0.15);
+    color: var(--dext-teal);
+    letter-spacing: 0.06em;
+  }
+
+  .intel-highlight {
+    background: linear-gradient(135deg, var(--dext-navy-light), var(--dext-navy-mid));
+    border: 1px solid rgba(255,107,53,0.25);
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .ih-stat .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.9rem;
+    color: var(--dext-orange);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .ih-stat .label {
+    font-size: 0.72rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--dext-gray);
+    line-height: 1.4;
+  }
+
+  /* ── THE OPPORTUNITY ── */
+  #opportunity { background: var(--dext-navy-mid); }
+
+  .opp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .opp-card {
+    background: var(--dext-navy);
+    border: 1px solid var(--dext-border);
+    border-radius: 10px;
+    padding: 1.75rem;
+  }
+
+  .opp-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dext-orange);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .opp-num::before {
+    content: '';
+    width: 16px; height: 1px;
+    background: var(--dext-orange);
+  }
+
+  .opp-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+
+  .opp-card p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.58);
+    line-height: 1.65;
+  }
+
+  .opp-banner {
+    background: var(--dext-navy);
+    border: 1px solid rgba(0,196,180,0.2);
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
+  }
+
+  .opp-banner h4 {
+    font-size: 0.85rem;
+    color: var(--dext-teal);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+
+  .opp-banner p {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+  }
+
+  /* ── PROOF / SKILLS ── */
+  #proof { background: var(--dext-navy); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .skill-card {
+    background: var(--dext-navy-mid);
+    border: 1px solid var(--dext-border);
+    border-radius: 10px;
+    padding: 2rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    transition: border-color 0.25s;
+  }
+
+  .skill-card:hover { border-color: rgba(255,107,53,0.3); }
+
+  .skill-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dext-gray);
+    letter-spacing: 0.12em;
+  }
+
+  .skill-tag {
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255,107,53,0.12);
+    color: var(--dext-orange);
+    letter-spacing: 0.06em;
+    width: fit-content;
+  }
+
+  .skill-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .skill-card p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.58);
+    line-height: 1.65;
+  }
+
+  .skill-proof {
+    font-size: 0.78rem;
+    color: var(--dext-teal);
+    font-style: italic;
+    line-height: 1.5;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--dext-border);
+  }
+
+  /* ── CASES ── */
+  #cases { background: var(--dext-navy-mid); }
+
+  .case-block {
+    background: var(--dext-navy);
+    border: 1px solid var(--dext-border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .case-header {
+    padding: 1.5rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--dext-border);
+    cursor: pointer;
+  }
+
+  .case-badge {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .case-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--dext-teal);
+    flex-shrink: 0;
+  }
+
+  .case-dot.orange { background: var(--dext-orange); }
+  .case-dot.gray { background: var(--dext-gray); }
+
+  .case-badge span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--dext-gray);
+    letter-spacing: 0.08em;
+  }
+
+  .case-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .case-body {
+    padding: 2rem;
+  }
+
+  .star-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .star-item {}
+
+  .star-item .star-letter {
+    width: 28px; height: 28px;
+    background: rgba(255,107,53,0.15);
+    border: 1px solid rgba(255,107,53,0.3);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--dext-orange);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+
+  .star-item h5 {
+    font-size: 0.72rem;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    color: var(--dext-gray);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+  }
+
+  .star-item p {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+  }
+
+  .case-results {
+    display: flex; gap: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--dext-border);
+  }
+
+  .case-result-stat {
+    text-align: center;
+    flex: 1;
+  }
+
+  .case-result-stat .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    color: var(--dext-teal);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .case-result-stat .label {
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--dext-gray);
+    line-height: 1.4;
+  }
+
+  /* ── PLAY ── */
+  #play { background: var(--dext-navy); }
+
+  .play-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--dext-border);
+    border: 1px solid var(--dext-border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .play-phase {
+    background: var(--dext-navy-mid);
+    padding: 2rem 1.75rem;
+  }
+
+  .play-phase-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: rgba(255,107,53,0.2);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .play-phase-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dext-orange);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .play-phase h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .play-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+
+  .play-list li {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.58);
+    display: flex; gap: 8px; align-items: flex-start;
+    line-height: 1.55;
+  }
+
+  .play-list li::before {
+    content: '→';
+    color: var(--dext-orange);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    margin-top: 2px;
+  }
+
+  .play-outcome {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--dext-border);
+    font-size: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--dext-teal);
+    line-height: 1.5;
+  }
+
+  /* ── ICP SECTION ── */
+  #icp { background: var(--dext-navy-mid); }
+
+  .icp-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .icp-card {
+    background: var(--dext-navy);
+    border: 1px solid var(--dext-border);
+    border-radius: 10px;
+    padding: 1.75rem;
+  }
+
+  .icp-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 2rem;
+    color: rgba(255,107,53,0.18);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .icp-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+
+  .icp-card p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.58);
+    line-height: 1.65;
+  }
+
+  .icp-card .icp-tag {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(0,196,180,0.12);
+    color: var(--dext-teal);
+    letter-spacing: 0.06em;
+  }
+
+  .objections-block {
+    background: var(--dext-navy);
+    border: 1px solid var(--dext-border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .obj-header {
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--dext-border);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--dext-orange);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .obj-row {
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--dext-border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .obj-row:last-child { border-bottom: none; }
+
+  .obj-q {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.65);
+    font-style: italic;
+  }
+
+  .obj-a {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.6;
+  }
+
+  /* ── CLOSE ── */
+  #close {
+    background: var(--dext-navy);
+    position: relative; overflow: hidden;
+  }
+
+  #close::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,107,53,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .close-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative; z-index: 1;
+  }
+
+  .close-inner h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .close-inner h2 em {
+    font-style: italic;
+    color: var(--dext-orange);
+  }
+
+  .close-inner p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .close-stats {
+    display: flex; gap: 2rem; justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .close-stat { text-align: center; }
+
+  .close-stat .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--dext-orange);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .close-stat .label {
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--dext-gray);
+    letter-spacing: 0.05em;
+  }
+
+  .close-contact {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--dext-gray);
+    letter-spacing: 0.06em;
+  }
+
+  .close-contact a {
+    color: var(--dext-orange);
+    text-decoration: none;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--dext-border);
+    padding: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .footer-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--dext-gray);
+    letter-spacing: 0.08em;
+  }
+
+  .footer-brand strong { color: var(--dext-orange); }
+
+  .footer-right {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--dext-border);
+    margin: 3rem 0;
+  }
+
+  /* ── ANIMATE ON SCROLL ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .intel-grid { grid-template-columns: 1fr; }
+    .intel-highlight { grid-template-columns: repeat(2, 1fr); }
+    .opp-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .star-grid { grid-template-columns: 1fr 1fr; }
+    .play-grid { grid-template-columns: 1fr; }
+    .icp-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .close-stats { flex-wrap: wrap; }
+    .obj-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <span class="dext-mark">DEXT</span>
+    ZAK DALAL · SENIOR AE, API SALES · 2026
+  </div>
+  <ul class="nav-links">
+    <li><a href="#intel">Intel</a></li>
+    <li><a href="#opportunity">Opportunity</a></li>
+    <li><a href="#proof">Proof</a></li>
+    <li><a href="#cases">Cases</a></li>
+    <li><a href="#play">90-Day Plan</a></li>
+    <li><a href="#icp">ICP</a></li>
+    <li><a href="#close">Close</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <p class="hero-label">Senior AE · API Sales · Toronto · March 2026</p>
+    <h1>Built to open<br><em>new territory.</em><br>From zero.</h1>
+    <p class="hero-sub">
+      Dext's API Sales division launched April 2025. No inherited pipeline. No playbook yet.
+      That's not a risk — that's exactly where I do my best work.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="num">7+</span>
+        <span class="label">Years full-cycle B2B SaaS enterprise sales</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">$2.2M</span>
+        <span class="label">Largest single deal closed — self-sourced cold outreach</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">40×</span>
+        <span class="label">Territory scaled in 6 months, built from a single pilot</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">110%+</span>
+        <span class="label">Quota attainment in every role, 100% self-sourced pipeline</span>
+      </div>
+    </div>
+    <div class="cta-bar">
+      <a href="#intel" class="cta-primary">Read the Case</a>
+      <span class="cta-meta">Confidential · Application Materials</span>
+    </div>
+  </div>
+</section>
+
+<!-- INTEL -->
+<section id="intel">
+  <div class="section-inner">
+    <p class="section-label">01 · Market Intel</p>
+    <h2 class="section-title">I understand <em>what Dext<br>is building.</em></h2>
+    <p class="section-sub">
+      The API Sales division is a new motion. Before calling any prospect,
+      I did the homework — on Dext, on the market, and on the buyer.
+    </p>
+
+    <div class="intel-grid fade-up">
+      <div class="intel-card">
+        <span class="ic-icon">⚙️</span>
+        <h4>Extraction as a Service — the product</h4>
+        <p>
+          Dext's API allows SaaS companies to embed document extraction and data classification
+          directly into their own products. 99.5% accuracy, 11,500+ financial sources, 
+          30+ accounting integrations. The buyer isn't the finance team — it's the <strong>CTO or CPO</strong>
+          evaluating whether to build or buy this capability.
+        </p>
+        <span class="tag">TECHNICAL BUYER SALE</span>
+      </div>
+      <div class="intel-card">
+        <span class="ic-icon">🏦</span>
+        <h4>The IRIS Software Group backing</h4>
+        <p>
+          Joining IRIS in 2024 gave Dext end-to-end accountancy infrastructure reach.
+          For API prospects, this means enterprise credibility, compliance posture, and 
+          the ability to sell into regulated fintech environments with confidence.
+          That's a meaningful edge over point-solution competitors.
+        </p>
+        <span class="tag">ENTERPRISE TRUST SIGNAL</span>
+      </div>
+      <div class="intel-card">
+        <span class="ic-icon">🎯</span>
+        <h4>The ICP: SaaS companies that process financial documents</h4>
+        <p>
+          Fintech apps, expense management tools, ERP platforms, accounting suites, 
+          lending platforms, AP automation tools — any SaaS company whose product 
+          touches receipts, invoices, or bank statements is a potential API customer.
+          I've sold to these buyers before. I know the conversation.
+        </p>
+        <span class="tag">ICP ALIGNMENT</span>
+      </div>
+      <div class="intel-card">
+        <span class="ic-icon">🔁</span>
+        <h4>Build vs. Buy — the core objection and the core pitch</h4>
+        <p>
+          Every API prospect will say: "We can build this ourselves."
+          The answer isn't features — it's cost of ownership, time-to-market, 
+          accuracy at scale, and ongoing maintenance. I've made this exact argument 
+          before, converting DIY shops to paid SaaS platforms at Biiibo.
+        </p>
+        <span class="tag">CORE OBJECTION HANDLED</span>
+      </div>
+    </div>
+
+    <div class="intel-highlight fade-up">
+      <div class="ih-stat">
+        <span class="num">35M+</span>
+        <span class="label">Hours of manual data entry saved by Dext globally</span>
+      </div>
+      <div class="ih-stat">
+        <span class="num">12K</span>
+        <span class="label">Accounting firms trusting Dext's data layer</span>
+      </div>
+      <div class="ih-stat">
+        <span class="num">700K</span>
+        <span class="label">Businesses on platform — proof of scale for API buyers</span>
+      </div>
+      <div class="ih-stat">
+        <span class="num">11,500+</span>
+        <span class="label">Financial data sources — moat that's hard to replicate</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPPORTUNITY -->
+<section id="opportunity">
+  <div class="section-inner">
+    <p class="section-label">02 · The Opportunity</p>
+    <h2 class="section-title">A new division.<br><em>A blank pipeline.<br>My ideal situation.</em></h2>
+    <p class="section-sub">
+      Most AEs want an inherited book. I've built from zero at every stage of my career —
+      and those are the roles where I've outperformed the most.
+    </p>
+
+    <div class="opp-grid fade-up">
+      <div class="opp-card">
+        <div class="opp-num">SIGNAL 01</div>
+        <h4>New business unit = early mover advantage</h4>
+        <p>
+          The API Sales division launched April 2025. There's no established competitor benchmark,
+          no quota ceiling from previous reps, and no territory definition yet. For a hunter,
+          that's the best possible setup. I can help define what good looks like.
+        </p>
+      </div>
+      <div class="opp-card">
+        <div class="opp-num">SIGNAL 02</div>
+        <h4>Technical buyers need consultative sellers</h4>
+        <p>
+          CTOs and CPOs don't want feature demos. They want someone who understands their
+          architecture problem and can quantify the build vs. buy tradeoff. I've sold custom API
+          integrations to that exact buyer at Appcare — I know how to earn technical trust.
+        </p>
+      </div>
+      <div class="opp-card">
+        <div class="opp-num">SIGNAL 03</div>
+        <h4>Outbound-first motion in a maturing fintech market</h4>
+        <p>
+          This role requires outbound creativity — cold calling, LinkedIn, events, webinars.
+          Not order-taking. I've been 100% self-sourced in every role. This isn't a new muscle.
+          It's the only muscle I've ever used.
+        </p>
+      </div>
+    </div>
+
+    <div class="opp-banner fade-up">
+      <h4>// MY DIRECT EXPERIENCE OVERLAP</h4>
+      <p>
+        At Appcare, I sold custom API integration solutions directly to CTOs — advising on how client systems
+        could connect to third-party partner ecosystems, and translating technical architecture decisions
+        into business outcomes. I closed a $2.2M enterprise deal through self-sourced cold outreach
+        in that motion. At Biiibo, I converted accounts running on manual tools to a paid SaaS platform
+        by making the automation ROI case — the same argument Dext's API team makes daily.
+        The Extraction as a Service sale is a natural home for what I already do.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section id="proof">
+  <div class="section-inner">
+    <p class="section-label">03 · What I Bring</p>
+    <h2 class="section-title">Six skills. <em>All proven.</em><br>All documented.</h2>
+    <p class="section-sub">
+      Not a list of adjectives. A record of what I've actually done —
+      with the proof points attached.
+    </p>
+
+    <div class="skills-grid fade-up">
+      <div class="skill-card">
+        <div class="skill-num">01</div>
+        <div class="skill-tag">CORE SKILL</div>
+        <h4>SELL TO TECHNICAL BUYERS</h4>
+        <p>
+          CTO, CPO, VP Engineering — I've been in those rooms. I don't get lost in specs.
+          I get curious about their architecture, find the gap, and translate it into a business case
+          the CFO will approve. Dext's API buyer is exactly this profile.
+        </p>
+        <div class="skill-proof">
+          Proof → $2.2M deal closed to CTO/technical C-suite at Appcare.
+          API integration solutions sold to technical decision-makers across 2 years.
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-num">02</div>
+        <div class="skill-tag">CORE SKILL</div>
+        <h4>BUILD PIPELINE FROM ZERO</h4>
+        <p>
+          I have never inherited a healthy book. Every role I've taken, I've built territory
+          from scratch — outbound prospecting, cold outreach, LinkedIn, events.
+          100% self-sourced pipeline is my baseline, not a flex.
+        </p>
+        <div class="skill-proof">
+          Proof → App Growth Network: founding enterprise hire, zero pipeline,
+          100%+ quota from Q1. Biiibo: 1 pilot → 40 locations, no playbook.
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-num">03</div>
+        <div class="skill-tag">CORE SKILL</div>
+        <h4>RUN FULL-CYCLE ENTERPRISE DEALS</h4>
+        <p>
+          Cold outreach through signed contract. I own every stage — discovery, demo,
+          stakeholder mapping, procurement, negotiation, close. No SDR support
+          in most of my roles. No hand-holding in any of them.
+        </p>
+        <div class="skill-proof">
+          Proof → Managed 80+ concurrent Salesforce opportunities. Closed $400K+ net-new
+          at Quantum Mob. Ran 3–6 month C-suite cycles at App Growth Network.
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-num">04</div>
+        <div class="skill-tag">CORE SKILL</div>
+        <h4>WIN THE BUILD VS. BUY CONVERSATION</h4>
+        <p>
+          Every API prospect says "we can build this." I've made the counter-case — cost of
+          ownership, time-to-market, accuracy risk, maintenance overhead —
+          successfully converting manual and DIY users to paid SaaS at Biiibo.
+        </p>
+        <div class="skill-proof">
+          Proof → Converted accounts from manual/free tools to paid SaaS at Biiibo,
+          growing ACV 90% per account, ranked #1 for expansion revenue.
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-num">05</div>
+        <div class="skill-tag">CORE SKILL</div>
+        <h4>COMPETE AND WIN AGAINST ALTERNATIVES</h4>
+        <p>
+          Dext's API faces internal build options, cheaper point solutions, and legacy players.
+          I've won contested deals — including a $120K enterprise close over two active competitors
+          at Quantum Mob by reframing the value conversation entirely.
+        </p>
+        <div class="skill-proof">
+          Proof → $120K deal won over 2 competitors by reframing features → outcomes.
+          Won Best Closer 2017 & 2018 against established alternatives.
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-num">06</div>
+        <div class="skill-tag">CORE SKILL</div>
+        <h4>OPERATE WITH MEDDIC DISCIPLINE</h4>
+        <p>
+          Clean CRM, accurate forecasting, structured qualification. I've managed 80+ concurrent
+          Salesforce opportunities with disciplined stage hygiene — giving leadership
+          reliable visibility while closing simultaneously.
+        </p>
+        <div class="skill-proof">
+          Proof → $4M+ ARR territory at Biiibo, 80+ concurrent SF opportunities,
+          105%+ annual quota with zero inbound or SDR support.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section id="cases">
+  <div class="section-inner">
+    <p class="section-label">04 · Case Record</p>
+    <h2 class="section-title"><em>Proof of work.</em></h2>
+    <p class="section-sub">Three deals. Three contexts. All directly mapped to the Dext API Sales motion.</p>
+
+    <!-- Case 1 -->
+    <div class="case-block fade-up">
+      <div class="case-header">
+        <div class="case-badge">
+          <div class="case-dot"></div>
+          <span>CLOSED · CASE-001 · API Integration Sale · Appcare</span>
+        </div>
+        <h3>$2.2M Enterprise Deal — Sold to the CTO</h3>
+      </div>
+      <div class="case-body">
+        <div class="star-grid">
+          <div class="star-item">
+            <div class="star-letter">S</div>
+            <h5>Situation</h5>
+            <p>Enterprise target with existing internal build. No RFP, no warm intro. Technical buyer skeptical of external solutions.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">T</div>
+            <h5>Task</h5>
+            <p>Self-source, qualify, and close the largest deal in company history — against internal resistance and competitive alternatives.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">A</div>
+            <h5>Action</h5>
+            <p>Built a custom competitive deck. Mapped the C-suite across 2 months. Reframed the conversation from features to total cost of ownership and integration risk.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">R</div>
+            <h5>Result</h5>
+            <p><strong>$2.2M net-new enterprise agreement</strong> — largest in company history. Won Best Closer Award 2017 & 2018. Self-sourced cold outreach start to finish.</p>
+          </div>
+        </div>
+        <div class="case-results">
+          <div class="case-result-stat">
+            <span class="num">$2.2M</span>
+            <span class="label">Net-new deal size — largest in company history</span>
+          </div>
+          <div class="case-result-stat">
+            <span class="num">2 mo.</span>
+            <span class="label">Multi-stakeholder cycle involving C-suite and finance</span>
+          </div>
+          <div class="case-result-stat">
+            <span class="num">Cold</span>
+            <span class="label">100% self-sourced — no SDR, no warm intro, no referral</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 2 -->
+    <div class="case-block fade-up">
+      <div class="case-header">
+        <div class="case-badge">
+          <div class="case-dot orange"></div>
+          <span>ACTIVE · CASE-002 · Territory Build · Biiibo</span>
+        </div>
+        <h3>1 Pilot Account → 40 Enterprise Locations in 6 Months</h3>
+      </div>
+      <div class="case-body">
+        <div class="star-grid">
+          <div class="star-item">
+            <div class="star-letter">S</div>
+            <h5>Situation</h5>
+            <p>Single franchise pilot flagged as strategic expansion opportunity. No territory structure, no outreach playbook, no existing relationships.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">T</div>
+            <h5>Task</h5>
+            <p>Build territory from zero while managing a 200+ enterprise account book in parallel. No dedicated support structure.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">A</div>
+            <h5>Action</h5>
+            <p>Mapped the franchise network, built relationship at operations director level, created repeatable onboarding per location, and ran proactive performance check-ins to drive expansion.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">R</div>
+            <h5>Result</h5>
+            <p><strong>40 active locations in 6 months</strong> — 4× team average. Territory fully operational. Model became internal reference for franchise account scaling.</p>
+          </div>
+        </div>
+        <div class="case-results">
+          <div class="case-result-stat">
+            <span class="num">40×</span>
+            <span class="label">Account growth in 6 months from one pilot</span>
+          </div>
+          <div class="case-result-stat">
+            <span class="num">4×</span>
+            <span class="label">Team average for expansion velocity</span>
+          </div>
+          <div class="case-result-stat">
+            <span class="num">90%</span>
+            <span class="label">Avg ACV increase per account — #1 for expansion revenue</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 3 -->
+    <div class="case-block fade-up">
+      <div class="case-header">
+        <div class="case-badge">
+          <div class="case-dot orange"></div>
+          <span>CLOSED · CASE-003 · Competitive Displacement · Quantum Mob</span>
+        </div>
+        <h3>$120K Deal Won — 2 Active Competitors, Reframed the Value Conversation</h3>
+      </div>
+      <div class="case-body">
+        <div class="star-grid">
+          <div class="star-item">
+            <div class="star-letter">S</div>
+            <h5>Situation</h5>
+            <p>Enterprise evaluation with two entrenched competitors already presenting. Prospect had already been pitched features-first by both alternatives.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">T</div>
+            <h5>Task</h5>
+            <p>Enter late into a contested evaluation and win — against alternatives that had a head start and existing relationships with the technical buyer.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">A</div>
+            <h5>Action</h5>
+            <p>Ran deep structured discovery — diagnosed the real business pain beneath the stated requirements. Reframed the evaluation from feature comparison to business outcome. Spoke to ROI and risk, not specs.</p>
+          </div>
+          <div class="star-item">
+            <div class="star-letter">R</div>
+            <h5>Result</h5>
+            <p><strong>$120K enterprise deal won</strong> against two active competitors. The framework I used — outcomes over features — is the same conversation Dext's API team needs to win on.</p>
+          </div>
+        </div>
+        <div class="case-results">
+          <div class="case-result-stat">
+            <span class="num">$120K</span>
+            <span class="label">Enterprise deal won against 2 active competitors</span>
+          </div>
+          <div class="case-result-stat">
+            <span class="num">$400K+</span>
+            <span class="label">Total net-new closed at Quantum Mob, 40+ concurrent opps</span>
+          </div>
+          <div class="case-result-stat">
+            <span class="num">0</span>
+            <span class="label">Features-first slides used — won on outcomes and discovery</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 90-DAY PLAN -->
+<section id="play">
+  <div class="section-inner">
+    <p class="section-label">05 · The Plan</p>
+    <h2 class="section-title">What I'll do in<br><em>the first 90 days.</em></h2>
+    <p class="section-sub">
+      A new division deserves someone who doesn't wait for a playbook.
+      Here's how I'll ramp, prove, and own territory fast.
+    </p>
+
+    <div class="play-grid fade-up">
+      <div class="play-phase">
+        <div class="play-phase-num">30</div>
+        <div class="play-phase-label">Days · Learn & Map</div>
+        <h4>Deep product mastery + ICP definition</h4>
+        <ul class="play-list">
+          <li>Immerse in Dext's API documentation — understand what the product does, what it requires from an integration partner, and where friction typically lives in implementation</li>
+          <li>Shadow the Head of API Sales — map the sales process as it exists, identify what's working and what's still undefined</li>
+          <li>Map the ICP: SaaS verticals most likely to benefit (fintech, AP automation, expense management, lending, ERP) — and build an initial target account list of 60–80 companies</li>
+          <li>Study competitive landscape: who else offers document extraction APIs, and how does Dext's accuracy and coverage differentiate</li>
+          <li>Introduce myself to inbound leads and early prospects — relationship-first, no pitch before I'm ready</li>
+        </ul>
+        <div class="play-outcome">
+          Outcome: Full ICP map. Target account list live. Product fluency achieved. First outbound sequence drafted.
+        </div>
+      </div>
+
+      <div class="play-phase">
+        <div class="play-phase-num">60</div>
+        <div class="play-phase-label">Days · Build & Prove</div>
+        <h4>Pipeline live + first meaningful conversations</h4>
+        <ul class="play-list">
+          <li>Launch outbound sequences — cold calls, LinkedIn, and targeted content engagement — against prioritized ICP accounts</li>
+          <li>Book and run first discovery calls with CTO/CPO profiles — testing messaging, objection patterns, and conversion rates</li>
+          <li>Identify the strongest 3–5 opportunities in early pipeline and advance them through structured MEDDIC qualification</li>
+          <li>Begin building the competitive displacement playbook for "we'll build it ourselves" — ROI model, time-to-market data, accuracy benchmarks</li>
+          <li>Deliver first pipeline and forecast report to Head of API Sales — with methodology, assumptions, and identified risks</li>
+        </ul>
+        <div class="play-outcome">
+          Outcome: 15–20 active prospects. 3–5 qualified opportunities in pipeline. First deals progressing toward demo stage.
+        </div>
+      </div>
+
+      <div class="play-phase">
+        <div class="play-phase-num">90</div>
+        <div class="play-phase-label">Days · Own & Close</div>
+        <h4>First closes + territory framework established</h4>
+        <ul class="play-list">
+          <li>Target first close — ideally a mid-market SaaS company with clear extraction use case and a CTO who's been through one discovery call and sees the ROI</li>
+          <li>Present market intelligence to leadership: ICP patterns, top objections, competitive intel gathered from 60 days of live calls</li>
+          <li>Propose refinements to the API Sales motion based on what I've learned — buyer personas, messaging, deal cycle expectations</li>
+          <li>Identify the top 3 verticals where Dext's API is most competitively differentiated — and recommend doubling down there in Q2</li>
+          <li>Be the person the team asks when a deal goes technical or a prospect pushes back hard on build vs. buy</li>
+        </ul>
+        <div class="play-outcome">
+          Outcome: First deal(s) closed. Territory framework proposed. Contributing to playbook development. Ramped and autonomous.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ICP & OBJECTIONS -->
+<section id="icp">
+  <div class="section-inner">
+    <p class="section-label">06 · ICP & Objections</p>
+    <h2 class="section-title">Where I'd prospect.<br><em>How I'd handle pushback.</em></h2>
+    <p class="section-sub">
+      The Dext API isn't for everyone. Here's where I'd focus pipeline effort — and the objections
+      I'd expect on every call, with how I'd respond.
+    </p>
+
+    <div class="icp-grid fade-up">
+      <div class="icp-card">
+        <div class="icp-num">01</div>
+        <h4>AP Automation & Expense Management SaaS</h4>
+        <p>
+          Companies building accounts payable tools or corporate expense platforms live and die
+          on document extraction quality. They're already ingesting invoices and receipts —
+          Dext's API can replace an inferior in-house build or a legacy extraction vendor.
+          This is the highest-density ICP.
+        </p>
+        <span class="icp-tag">HIGHEST DENSITY TARGET</span>
+      </div>
+      <div class="icp-card">
+        <div class="icp-num">02</div>
+        <h4>Lending & Embedded Finance Platforms</h4>
+        <p>
+          Lenders that evaluate business creditworthiness need clean, structured financial
+          document data fast. Dext's bank statement and invoice extraction at 99.5% accuracy
+          is a straight ROI conversation — fewer underwriting errors, faster decisioning.
+          CTO / Head of Data is the buyer.
+        </p>
+        <span class="icp-tag">HIGH URGENCY BUYER</span>
+      </div>
+      <div class="icp-card">
+        <div class="icp-num">03</div>
+        <h4>ERP & Mid-Market Accounting Software</h4>
+        <p>
+          Mid-market ERP and accounting platforms often have weak or absent document capture.
+          Dext's API gives them instant extraction capability without a multi-year internal build.
+          Partnership and product integration angle — CPO is often the champion here.
+        </p>
+        <span class="icp-tag">PARTNERSHIP POTENTIAL</span>
+      </div>
+      <div class="icp-card">
+        <div class="icp-num">04</div>
+        <h4>Vertical SaaS with Financial Document Workflows</h4>
+        <p>
+          Construction, hospitality, professional services platforms that handle supplier invoices,
+          expense receipts, or contract documents. Many are still on manual extraction or low-accuracy OCR.
+          Dext's sector depth (construction, hospitality) means I can speak their language immediately.
+        </p>
+        <span class="icp-tag">SECTOR LANGUAGE ADVANTAGE</span>
+      </div>
+    </div>
+
+    <div class="objections-block fade-up">
+      <div class="obj-header">// REAL OBJECTIONS. REAL ANSWERS.</div>
+      <div class="obj-row">
+        <div class="obj-q">"We can build our own extraction in-house."</div>
+        <div class="obj-a">What's your current estimated cost to build to 99.5% accuracy across 11,500+ financial sources? And what does your maintenance roadmap look like as source formats change? I can help you model the build vs. buy comparison — most companies find the 18-month cost of building exceeds Dext's API cost by 3–5× before they're at parity on accuracy.</div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"We already have an OCR or extraction vendor."</div>
+        <div class="obj-a">What's your current accuracy rate on unstructured documents — handwritten receipts, non-standard invoice formats, non-English source documents? Dext processes 700K+ businesses worth of data. The accuracy difference often shows up in edge cases. I'd like to run a comparison on a sample of your actual documents.</div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"This isn't a priority right now."</div>
+        <div class="obj-a">Understood. Can I ask — what percentage of your current document processing errors are costing you in manual review time or customer escalations? I ask because most companies I speak to discover the extraction problem is costing more than it looks. I'm not looking to rush a decision — I'd rather show you the data and let you decide when it becomes urgent.</div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"We don't have budget right now."</div>
+        <div class="obj-a">Budget or priority? Those are different conversations. If it's priority, I'd rather understand what's ahead of this internally so I can help you make the case when the window opens. If it's genuinely budget, let me show you how this typically gets funded — usually under infrastructure or data quality, not a new line item.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<section id="close">
+  <div class="section-inner close-inner">
+    <p class="section-label" style="justify-content:center;">07 · The Close</p>
+    <h2 class="section-title" style="text-align:center;">I was built for<br><em>this exact role.</em></h2>
+    <p>
+      Not because I know Dext's product inside-out yet.
+      Because I know the buyer. I know the motion. I know how to build from zero.
+      And I know how to turn a blank territory into a pipeline
+      without waiting for someone to hand me a playbook.
+    </p>
+    <div class="close-stats">
+      <div class="close-stat">
+        <span class="num">7+</span>
+        <span class="label">Years Full-Cycle B2B SaaS</span>
+      </div>
+      <div class="close-stat">
+        <span class="num">$2.2M</span>
+        <span class="label">Largest Single Deal Closed</span>
+      </div>
+      <div class="close-stat">
+        <span class="num">100%</span>
+        <span class="label">Self-Sourced Pipeline Every Role</span>
+      </div>
+      <div class="close-stat">
+        <span class="num">Day 1</span>
+        <span class="label">Ready to Build</span>
+      </div>
+    </div>
+    <div class="close-contact">
+      Prepared by <strong>Zak Dalal</strong> · Toronto, ON ·
+      <a href="mailto:saketd86@gmail.com">saketd86@gmail.com</a> ·
+      250-802-9393 · Senior AE, API Sales Application · March 2026
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <strong>ZAK DALAL</strong> × DEXT SENIOR AE API SALES · TORONTO · 2026
+  </div>
+  <div class="footer-right">Confidential application materials</div>
+</footer>
+
+<script>
+  // Animate on scroll
+  const els = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  els.forEach(el => observer.observe(el));
+
+  // Smooth active nav
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--dext-orange)' : '';
+    });
+  });
+</script>
+</body>
+</html>
